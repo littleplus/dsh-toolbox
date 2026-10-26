@@ -1,0 +1,37 @@
+# 发布到 npm 公共 registry：创建 GitHub Release 时触发。
+# 前置：仓库 Secrets 里配置 NPM_TOKEN（granular token，对本包有 read/write）。
+name: publish
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: read
+  # --provenance 需要把构建来源签名给 npm，缺这个权限会退化为普通发布并告警。
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      # 本包没有 dependencies，npm ci 只是把 lockfile 当作可复现的锚点。
+      - run: npm ci
+      # tag 必须与 package.json 的 version 完全一致，否则会在 npm 侧撞 403（版本已存在）。
+      - name: 校验 tag 与版本一致
+        run: |
+          expected="v$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "$expected" ]; then
+            echo "tag $GITHUB_REF_NAME 与 package.json 版本 $expected 不一致"
+            exit 1
+          fi
+      - run: npm test
+      - run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

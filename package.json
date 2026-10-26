@@ -1,9 +1,28 @@
 {
-  "name": "dsh-toolbox",
+  "name": "@littleplus/dsh-toolbox",
   "version": "0.2.0",
-  "private": true,
   "description": "Group globally registered tools in the profile patch: leave them alone, hide them, or expose them on demand behind one gateway tool.",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littleplus/dsh-toolbox.git"
+  },
+  "homepage": "https://github.com/littleplus/dsh-toolbox#readme",
+  "bugs": {
+    "url": "https://github.com/littleplus/dsh-toolbox/issues"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "tools",
+    "context-window",
+    "progressive-disclosure"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
@@ -17,8 +36,15 @@
     "cordis.patch.yml",
     "locale/*.json",
     "icon.svg",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
+  "scripts": {
+    "test": "node test/core.test.mjs && node test/panel.test.mjs && node test/client.test.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"

@@ -2,6 +2,14 @@
 
 按正则把**全局注册的工具**分组，并用三种状态控制它们在模型上下文里的存在方式。左侧栏提供一个面板，可以直接增删改分组——写的是 profile 的 `cordis.patch.yml`。
 
+## 安装
+
+```bash
+dsh plugin --profile desktop add @littleplus/dsh-toolbox
+```
+
+安装后 profile 的 `dsh.profile.bundles` 会自动追加本包，`dsh.bundle.patch` 指向的 `cordis.patch.yml` 随之生效（往插件树里插入一行 `id: toolbox`）。左侧栏出现「工具箱」即装好；面板读写的是 profile 自己的 patch 层。
+
 ## 三种状态
 
 | status | 行为 |
@@ -48,7 +56,7 @@
 
 ```yaml
 - id: toolbox
-  name: dsh-toolbox
+  name: '@littleplus/dsh-toolbox'
   config:
     - { id: web, tools_regex: '^web_', description: '...', status: request }
 ```
@@ -100,6 +108,7 @@
 
 ```bash
 cd dsh-toolbox
+npm test                    # 等价于依次跑下面三个文件
 node test/core.test.mjs     # 归一化 / 匹配 / 按序认领 / 隐藏集合判定
 node test/panel.test.mjs    # 面板服务的增删改移：落盘形状、校验、改 id、顺序、预览、形态保留
 node test/client.test.mjs   # 浏览器半区冒烟：bundle 求值、槽位注册、Remote 描述符校验、主题令牌

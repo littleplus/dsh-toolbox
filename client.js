@@ -17,7 +17,7 @@
  * `$mount` 只认 `mode: 'strict'`，`src-json` 仅对 result 有效。
  */
 window.__ModuleLoader__.load({
-  id: 'dsh-toolbox',
+  id: '@littleplus/dsh-toolbox',
   factory(require) {
     const React = require('react')
     const h = React.createElement
@@ -29,7 +29,7 @@ window.__ModuleLoader__.load({
     /** 宿主侧 Remote 命名空间（与插件行 id、service key 相同）。 */
     const REMOTE_NS = 'toolbox'
     /** 包名，用于 wire 描述符 id 与类型符号。 */
-    const PACKAGE = 'dsh-toolbox'
+    const PACKAGE = '@littleplus/dsh-toolbox'
 
     const STATUSES = ['open', 'close', 'request']
     const STATUS_LABEL = { open: 'statusOpen', close: 'statusClose', request: 'statusRequest' }

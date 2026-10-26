@@ -64,7 +64,7 @@ const sandbox = {
 vm.runInNewContext(source, sandbox, { filename: 'client.js' })
 
 assert.ok(bundle, 'client.js 没有调用 window.__ModuleLoader__.load')
-assert.equal(bundle.id, 'dsh-toolbox')
+assert.equal(bundle.id, '@littleplus/dsh-toolbox')
 
 const requests = []
 const exported = bundle.factory((id) => {
@@ -139,7 +139,7 @@ assert.deepEqual(Object.keys(main.options.inject()).sort(), ['call', 'goConversa
 
 // ── Remote 描述符：入参必须 strict，且与宿主 MANIFEST 对齐 ──────────────────
 assert.ok(contribution, '没有调用 ctx.remote.$mount')
-assert.equal(contribution.package, 'dsh-toolbox')
+assert.equal(contribution.package, '@littleplus/dsh-toolbox')
 {
   const ids = new Set()
   for (const descriptor of contribution.descriptors) {

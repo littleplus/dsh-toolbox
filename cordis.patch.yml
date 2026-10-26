@@ -10,4 +10,4 @@
 # 覆盖行是 profile 自己的层，所以面板的增删改都写回那里。
 - insert:
     - id: toolbox
-      name: dsh-toolbox
+      name: '@littleplus/dsh-toolbox'

@@ -14,7 +14,7 @@ function fakeEditor(seed) {
     documentPath: 'C:/profiles/desktop/cordis.patch.yml',
     state,
     entries() {
-      return [{ options: { id: ROW_ID, name: 'dsh-toolbox', config: state.config }, fiber: {} }]
+      return [{ options: { id: ROW_ID, name: '@littleplus/dsh-toolbox', config: state.config }, fiber: {} }]
     },
     async edit(_entry, change) {
       const current = structuredClone(state.config)
