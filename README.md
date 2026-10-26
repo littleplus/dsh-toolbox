@@ -91,6 +91,33 @@ dsh plugin --profile desktop add @littleplus/dsh-toolbox
 
 写错的行不会让插件加载失败：它出现在面板的「配置问题」里，其余分组照常工作。手写的东西面板也认——面板改一组时只覆盖这四个字段，其它字段原样保留。
 
+## 实际配置示例
+
+下面这份配置直接在跑：OpenViking 的 MCP 工具集挂了一大堆名字，日常只会用到检索和读写的那几个，其余（`health`、ACL、watch、用户/组管理之类）从来不会主动调用，留着只是白占工具列表。
+
+```yaml
+- id: toolbox
+  name: '@littleplus/dsh-toolbox'
+  config:
+    - id: openviking_default_enable
+      tools_regex: ^mcp__openviking__(read|list|forget|remember|write|find|search|edit|grep)$
+      description: ""
+      status: open
+    - id: openviking_default_disable
+      tools_regex: ^mcp__openviking__.*$
+      description: ""
+      status: close
+```
+
+读法：
+
+- 第一组 `open` 先把这 9 个日常工具**认领**走。它的状态是 `open`，所以对它们不做任何处理——但认领本身就是保护，名字已经归它了。
+- 第二组 `close` 的 `^mcp__openviking__.*$` 看着能匹配全部，实际上只能拿到**第一组剩下的**名字（`health`、ACL、watch、用户/组等），于是只有这些从会话工具列表里消失。
+- 两条正则都带 `$`，`read` 不会吃掉 `read_*` 之类的同前缀名字；`list_users`、`list_watches` 也不会被第一组的 `list` 误抓。
+- `description` 留空是对的：`open` / `close` 不需要它，只有 `request` 组必填（那是入口工具唯一的说明）。
+
+**把两行对调就全没了**：`close` 先执行会吃光整组 `mcp__openviking__*`，后面那个 `open` 一个也拿不到。面板上第二张卡片会直接写"*N* 个匹配已被上面更靠前的分组认领"，所以这种沉默的失效一眼能看见。
+
 ## 设计取舍（为什么这么实现）
 
 - **隐藏必须走 `ctx.tools.restrict()`**，且只能从 scoped ctx 施加，所以每个 agent 挂一个声明了 `inject: ['tools']` 的微型插件，由它在 agent 作用域里注册限制和入口工具；agent 销毁时 effect 自动解绑。`tools.guard()` 做不到这件事——它只拒绝调用，省不下上下文。
