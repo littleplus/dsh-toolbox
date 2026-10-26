@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Toolbox",
+    "description": "Group the globally registered tools with regular expressions and choose whether each group stays on, is turned off, or loads on demand behind one gateway tool."
+  }
+}

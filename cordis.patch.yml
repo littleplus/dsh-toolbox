@@ -1,0 +1,13 @@
+# dsh-toolbox bundle patch.
+#
+# 只插入一行插件。分组配置由面板写入 profile 的 cordis.patch.yml（用**同一个 id**
+# 覆盖这一行的 config），也可以手写：
+#
+#   - id: toolbox
+#     config:
+#       - { id: web, tools_regex: '^web_', description: '...', status: request }
+#
+# 覆盖行是 profile 自己的层，所以面板的增删改都写回那里。
+- insert:
+    - id: toolbox
+      name: dsh-toolbox
